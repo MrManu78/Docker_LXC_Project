@@ -1,2 +1,4 @@
-FROM Ubuntu:22.04
+FROM ubuntu:22.04
 RUN apt update -y && apt install mariadb-server -y
+EXPOSE 3306
+CMD ["mariadbd"]

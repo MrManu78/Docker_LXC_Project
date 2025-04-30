@@ -1,2 +1,0 @@
-FROM Ubuntu:22.04
-RUN apt install nginx -y 

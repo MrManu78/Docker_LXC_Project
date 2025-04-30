@@ -1,26 +1,72 @@
-version: '3.7'
-
 services:
-  web:
-    image: httpd/project
-
+  web1:
+    image: web/project
+    restart: always
+    container_name: web-projet1
     networks:
       - webservices
       - db
 
 
-  database:
-    image: db/project
+  database1:
+    image: mariadb:11.7.2
+    container_name: db-projet1
+    restart: always
+    environment:
+       MARIADB_ROOT_PASSWORD: example
     networks:
       - db
 
+  web2:
+    image: web/project
+    restart: always
+    container_name: web-projet2
+    networks:
+      - webservices2
+      - db2
 
 
+  database2:
+    image: mariadb:11.7.2
+    container_name: db-projet2
+    restart: always
+    environment:
+       MARIADB_ROOT_PASSWORD: example
+    networks:
+      - db2
 
+  web3:
+    image: web/project
+    restart: always
+    container_name: web-projet3
+    networks:
+      - webservices3
+      - db3
+
+
+  database3:
+    image: mariadb:11.7.2
+    container_name: db-projet3
+    restart: always
+    environment:
+       MARIADB_ROOT_PASSWORD: example
+    networks:
+      - db3
 
 
 networks:
   webservices:
-    name: webservices
+    name: web-projet1-net
+    external: true
   db:
-    name: db
+    name: db-projet1-net
+  webservices2:
+    name: web-projet2-net
+    external: true
+  db2:
+    name: db-projet2-net
+  webservices3:
+    name: web-projet3-net
+    external: true
+  db3:
+    name: db-projet3-net

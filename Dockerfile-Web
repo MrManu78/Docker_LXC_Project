@@ -1,4 +1,0 @@
-FROM Ubuntu:22.04
-RUN apt update -y  && apt install apache2 -y
-USER www-data
-
