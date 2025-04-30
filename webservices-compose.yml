@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  web:
+    image: httpd/project
+
+    networks:
+      - webservices
+      - db
+
+
+  database:
+    image: db/project
+    networks:
+      - db
+
+
+
+
+
+
+networks:
+  webservices:
+    name: webservices
+  db:
+    name: db
