@@ -6,6 +6,8 @@ services:
     networks:
       - webservices
       - db
+    volumes:
+      - data_web1:/var/www/html/
 
 
   database1:
@@ -24,7 +26,8 @@ services:
     networks:
       - webservices2
       - db2
-
+    volumes:
+      - data_web2:/var/www/html/
 
   database2:
     image: mariadb:11.7.2
@@ -34,7 +37,7 @@ services:
        MARIADB_ROOT_PASSWORD: example
     networks:
       - db2
-
+    
   web3:
     image: web/project
     restart: always
@@ -42,6 +45,8 @@ services:
     networks:
       - webservices3
       - db3
+    volumes:
+      - data_web3:/var/www/html/
 
 
   database3:
@@ -57,16 +62,20 @@ services:
 networks:
   webservices:
     name: web-projet1-net
-    external: true
   db:
     name: db-projet1-net
   webservices2:
     name: web-projet2-net
-    external: true
   db2:
     name: db-projet2-net
   webservices3:
     name: web-projet3-net
-    external: true
   db3:
     name: db-projet3-net
+volumes:
+  data_web1:
+    name: data_web1
+  data_web2:
+    name: data_web2
+  data_web3:
+    name: data_web3
