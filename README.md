@@ -37,7 +37,7 @@ docker run -dt --name rproxy --network web-projet1-net --network web-projet2-net
 docker ps -a
 ```
 # Déploiement automatique via Docker-Compose
-S'il était souhaité déployer automatiquement l'architecture, l'utilisation d'un fichier compose serait pertient
+S'il était souhaité déployer automatiquement l'architecture, l'utilisation d'un fichier compose serait pertinent
 ```bash
 docker compose -f webservices-compose.yml up -d 
 docker ps -a
