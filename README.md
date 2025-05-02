@@ -16,19 +16,15 @@ docker network create db-projet1-net
 docker network create db-projet2-net
 docker network create db-projet3-net
 ```
-Créer trois dossiers : web1, web2, web3 et y inclure un fichier index.html avec une simple phrase permettant de différencier les 3 projets.
+Créer trois dossiers : web1, web2, web3
 ```bash
 mkdir web1, web2, web3
-PROJET1=Bienvenue sur le projet 1
-PROJET2=Bienvenue sur le projet 2 
-PROJET3=Bienvenue sur le projet 3
-echo "$PROJET1" > $HOME/web1/index.html && echo "$PROJET2" > $HOME/web2/index.html && echo "$PROJET3" > $HOME/web3/index.html
 ```
 ```bash
 # Execution containers web
-docker run -dt --name web-projet-1 -v $HOME/projet/web1/ --network web-projet1-net --network db-projet1-net web/project
-docker run -dt --name web-projet-2 -v $HOME/projet/web2/ --network web-projet2-net --network db-projet2-net web/project
-docker run -dt --name web-projet-3 -v $HOME/projet/web3/ --network web-projet3-net --network db-projet3-net web/project
+docker run -dt --name web-projet-1 -v $HOME/projet/web1/:/var/www/html --network web-projet1-net --network db-projet1-net web/project
+docker run -dt --name web-projet-2 -v $HOME/projet/web2/:/var/www/html --network web-projet2-net --network db-projet2-net web/project
+docker run -dt --name web-projet-3 -v $HOME/projet/web3/:/var/www/html --network web-projet3-net --network db-projet3-net web/project
 ```
 ```bash
 # Execution contianers db
@@ -40,7 +36,13 @@ Créer un dossier rproxy
 ```bash
 mkdir ~/rproxy
 ```
-
+Ajout fichier index.html à chaque web container afin de différencier les trois projets
+```bash
+PROJET1=Bienvenue sur le projet 1
+PROJET2=Bienvenue sur le projet 2 
+PROJET3=Bienvenue sur le projet 3
+echo "$PROJET1" > $HOME/web1/index.html && echo "$PROJET2" > $HOME/web2/index.html && echo "$PROJET3" > $HOME/web3/index.html
+```
 # Execution container reverse-proxy
 ```bash
 docker run -dt --name rproxy -v $HOME/projet/rproxy:/etc/nginx/ --network web-projet1-net --network web-projet2-net --network web-projet3-net -p 8080:80 rpoxy/projet
