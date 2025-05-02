@@ -32,13 +32,56 @@ docker run -dt --name web-projet-3 -v $HOME/projet/web3/ --network web-projet3-n
 ```
 ```bash
 # Execution contianers db
-docker run -dt --name db-projet-1 --network db-projet1-net mariadb:11.7.2
-docker run -dt --name db-projet-2 --network db-projet2-net mariadb:11.7.2
-docker run -dt --name db-projet-3 --network db-projet3-net mariadb:11.7.2
+docker run -dt --name db-projet-1 --network db-projet1-net --env MARIADB_ROOT_PASSWORD=example mariadb:11.7.2
+docker run -dt --name db-projet-2 --network db-projet2-net --env MARIADB_ROOT_PASSWORD=example mariadb:11.7.2
+docker run -dt --name db-projet-3 --network db-projet3-net --env MARIADB_ROOT_PASSWORD=example mariadb:11.7.2
 ```
+Créer un dossier rproxy
 ```bash
+mkdir ~/rproxy
+```
+
 # Execution container reverse-proxy
-docker run -dt --name rproxy --network web-projet1-net --network web-projet2-net --network web-projet3-net -p 8080:80 rpoxy/projet
+```bash
+docker run -dt --name rproxy -v $HOME/projet/rproxy:/etc/nginx/ --network web-projet1-net --network web-projet2-net --network web-projet3-net -p 8080:80 rpoxy/projet
+```
+Configuration du proxy pour redirection de traffic vers les services correspondants
+```bash
+#Dans le dossier sites-enabled, créer un fichier reverse.conf
+server{
+
+        listen 80;
+        server_name web-projet1.local;
+        location / {
+                proxy_pass http://web-projet1;
+        }
+}
+server{
+
+        listen 80;
+        server_name web-projet2.local;
+
+        location / {
+                proxy_pass http://web-projet2;
+        }
+}
+server{
+
+        listen 80;
+        server_name web-projet3.local;
+
+        location / {
+                proxy_pass http://web-projet3;
+        }
+}
+
+#Suppression du fichier par défaut afin d'éviter de possibles erreurs
+rm $HOME/rproxy/sites-enabled/default
+#Vérifier que le fichier est correct pour nginx et reload
+docker exec rproxy nginx -t
+docker exec rproxy nginx -s reload 
+#Modifier le fichier hosts de la machine hôte afin que les redirections s'établissent
+printf "127.0.0.1 web-projet1.local\n127.0.0.1 web-projet2.local\n127.0.0.1 web-projet3.local" >> /etc/hosts  
 ```
 ```bash
 # Vérifier que l'architecture est déployée 
