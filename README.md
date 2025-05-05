@@ -101,7 +101,7 @@ L'entièreté de l'architecture est déployée y compris la création des networ
 Le script à exécuter ci-après détaille le déploiement automatique d'une infrastructure LXC containers simple (3 serveurs web, 3 bases de données), une entrée utilisateur est attendue définissant le nom à donner aux containers et le mot de passe à definir pour MariaDB
 ```bash
 sudo chmod +x ./auto_deploy_lxc.sh
+mkdir -p $HOME/shared-files-lxd
 sudo ./auto_deploy_lxc.sh
 ```
-
 
